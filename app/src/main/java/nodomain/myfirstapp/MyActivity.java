@@ -30,6 +30,10 @@ public class MyActivity extends AppCompatActivity implements View.OnTouchListene
     final String DEBUG_TAG = "onTouchEventDebug";
     final String DEBUG_TAG_MOVE = "onTouchEventDebugMove";
 
+
+    BluetoothSocket bluetoothSocket = null;
+    OutputStream outputStream = null;
+
     /*
     View myView = findViewById(R.id.imageViewRobotTouch);
     myView.OnTouchListener(new View.OnTouchListener()) {
@@ -43,12 +47,27 @@ public class MyActivity extends AppCompatActivity implements View.OnTouchListene
     /**
      * Called when the user clicks the Send button
      */
-    public void sendMessage(View view) {
+    public void sendMessage(View view) throws IOException{
         Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
+
+        //TODO For some reason. If if start the intent and send the bluetooth message then my app crashes on sending the second message. However either works fine multiple times by itself. Suggesting tryinga try catch on ensitre method and then a print stack trace
+
+        try {
+            outputStream.write(message.getBytes());
+        }
+        catch (IOException ex) {
+            Log.e(DEBUG_TAG, "Failed to  write message to stream");
+            ex.printStackTrace();
+
+        }
+
+        /*
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+        */
+
     }
 
     public void startBluetooth(View view) {
@@ -60,14 +79,11 @@ public class MyActivity extends AppCompatActivity implements View.OnTouchListene
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        //mac address of blueSmirf
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:06:66:6A:5C:41");
 
-        BluetoothSocket bluetoothSocket = null;
-
-        OutputStream outputStream = null;
-
         try {
-            bluetoothSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
             //bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException ex) {
             Log.e(TAG, "Failed to create socket");
@@ -84,11 +100,20 @@ public class MyActivity extends AppCompatActivity implements View.OnTouchListene
             Log.e(TAG, "Failed to create connection or output stream", ex);
         }
 
+        /*
         try {
             outputStream.write("Hello from Android".getBytes());
         } catch (IOException ex) {
             Log.e(TAG, "Failed to write to output stream", ex);
         }
+        */
+    }
+
+    public void stopBluetooth(View view)
+    {
+            try {
+            bluetoothSocket.close();
+        } catch (IOException e) { }
     }
 
     public boolean onTouch(View v, MotionEvent event) {
