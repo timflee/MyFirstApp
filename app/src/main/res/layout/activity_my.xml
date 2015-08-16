@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X Position"
+            android:id="@+id/textViewXPosition"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Y Position"
+            android:id="@+id/textViewYPosition"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText android:id="@+id/edit_message"
+            android:layout_weight="1"
+            android:hint="@string/edit_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <!-- Setting 0dp width because weight =1 overrides the width -->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="sendMessage"
+            android:text="@string/button_send"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="startBluetooth"
+            android:text="@string/button_bluetooth"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_gravity="center|fill_vertical"
+        android:layout_width="400dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageViewRobotTouch"
+        android:hapticFeedbackEnabled="false"
+        android:focusableInTouchMode="true" />
+
+</LinearLayout>
